@@ -40,4 +40,4 @@ jobs:
           docker pull rheech22/cicd-practice:${GITHUB_SHA::7}
           docker tag rheech22/cicd-practice:${GITHUB_SHA::7} cicd-practice
           docker stop server
-          docker run —-rm -d -p 80:3000 -—name server cicd-practice
+          docker run -d --rm -—name server -p 80:3000 cicd-practice
