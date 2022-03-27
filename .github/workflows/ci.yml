@@ -29,3 +29,15 @@ jobs:
         docker build -t cicd-practice .
         docker tag cicd-practice rheech22/cicd-practice:${GITHUB_SHA::7}
         docker push rheech22/cicd-practice:${GITHUB_SHA::7}
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ec2-3-36-85-231.ap-northeast-2.compute.amazonaws.com
+        username: ec2-user
+        key: ${{ secrets.PRIVATE_KEY }}
+        envs: GITHUB_SHA
+        script: |
+          docker pull rheech22/cicd-practice:${GITHUB_SHA::7}
+          docker tag rheech22/cicd-practice:${GITHUB_SHA::7} cicd-practice
+          docker stop server
+          docker run —rm -d -p 80:3000 —name server cicd-practice
